@@ -1,7 +1,8 @@
 from pathlib import Path
 import joblib
 import pandas as pd
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score
+
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data"
@@ -38,10 +39,17 @@ def evaluar_modelo():
 
     y_pred = modelo.predict(X_test)
 
+    if hasattr(modelo, "predict_proba"):
+        y_prob = modelo.predict_proba(X_test)[:, 1]
+        roc_auc = roc_auc_score(y_test, y_prob)
+    else:
+        roc_auc = None
+
     accuracy = accuracy_score(y_test, y_pred)
     precision = precision_score(y_test, y_pred, zero_division=0)
     recall = recall_score(y_test, y_pred, zero_division=0)
     f1 = f1_score(y_test, y_pred, zero_division=0)
+    roc_auc_texto = f"{roc_auc:.4f}" if roc_auc is not None else "No disponible"
 
     contenido = f"""# Métricas del modelo de churn
 
@@ -53,10 +61,13 @@ def evaluar_modelo():
 | Precision | {precision:.4f} |
 | Recall | {recall:.4f} |
 | F1-score | {f1:.4f} |
+| ROC-AUC | {roc_auc_texto} |
 
-## Interpretación inicial
+## Interpretación
 
-Estas métricas permiten evaluar el desempeño inicial del modelo de clasificación.
+La métrica ROC-AUC fue agregada como parte del mini experimento del modelo.
+Esta métrica permite evaluar la capacidad del modelo para diferenciar entre clientes que hacen churn y clientes que no hacen churn.
+
 
 - Accuracy indica el porcentaje general de aciertos.
 - Precision indica qué tan confiables son las predicciones positivas.
@@ -66,8 +77,13 @@ Estas métricas permiten evaluar el desempeño inicial del modelo de clasificaci
 
     METRICS_FILE.write_text(contenido, encoding="utf-8")
 
-    print("Modelo evaluado correctamente.")
+    print("Evaluación completada correctamente.")
     print(f"Métricas guardadas en: {METRICS_FILE}")
+    print(f"Accuracy: {accuracy:.4f}")
+    print(f"Precision: {precision:.4f}")
+    print(f"Recall: {recall:.4f}")
+    print(f"F1-Score: {f1:.4f}")
+    print(f"ROC-AUC: {roc_auc_texto}")
 
 if __name__ == "__main__":
     evaluar_modelo()
