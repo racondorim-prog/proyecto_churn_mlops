@@ -57,3 +57,37 @@ El flujo básico será:
 Este proyecto utiliza Git para registrar cambios y GitHub para respaldar el repositorio en la nube.
 
 El uso de commits permite mantener trazabilidad sobre los cambios realizados en el código, la documentación y la estructura del proyecto.
+
+## Documentación técnica adicional
+
+### Arquitectura del proyecto
+
+El proyecto sigue una estructura organizada para facilitar la reproducibilidad y mantenimiento:
+
+* `api/`: API desarrollada con FastAPI para consumir el modelo.
+* `data/`: Conjunto de datos de entrenamiento y prueba.
+* `docs/`: Documentación y métricas generadas.
+* `models/`: Modelos entrenados almacenados en formato `.pkl`.
+* `src/`: Scripts de preparación de datos, entrenamiento y evaluación.
+* `tests/`: Pruebas automatizadas de la API.
+
+### Modelos implementados
+
+Durante el desarrollo se utilizaron los siguientes algoritmos:
+
+1. Regresión Logística.
+2. Árbol de Decisión.
+
+### Métricas de evaluación
+
+El modelo es evaluado mediante:
+
+* Accuracy
+* Precision
+* Recall
+* F1-Score
+* ROC-AUC
+
+### Trazabilidad y control de versiones
+
+El proyecto utiliza Git y GitHub para registrar la evolución del código fuente, documentación, pruebas y experimentos realizados. Cada modificación importante se registra mediante commits descriptivos y ramas específicas para experimentación.
