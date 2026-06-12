@@ -99,3 +99,14 @@ def predict(datos: ClienteEntrada) -> PrediccionSalida:
             status_code=500,
             detail="No fue posible generar la predicción.",
         ) from exc
+@app.get("/info")
+def info():
+    return {
+        "autor": "Ruddy Condori",
+        "version_modelo": VERSION_MODELO,
+        "variables": [
+            "antiguedad",
+            "cargo_mensual",
+            "reclamos"
+        ]
+    }
